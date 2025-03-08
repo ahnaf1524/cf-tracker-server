@@ -3,12 +3,26 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
-
+const os = require('os');
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-
+// utitlity functions
+const getCurrentTime = () => {
+    return new Date().toLocaleString();
+};
+const getDeviceIP = () => {
+    const interfaces = os.networkInterfaces();
+    for (let iface in interfaces) {
+        for (let details of interfaces[iface]) {
+            if (details.family === 'IPv4' && !details.internal) {
+                return details.address;
+            }
+        }
+    }
+    return 'Unknown';
+};
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -61,8 +75,15 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
-
 // Routes
+app.get('/', (req, res) => {
+    res.json({
+        message: "Welcome to the Problem Solving Tracker API 🚀",
+        server_status: "Online",
+        current_time: getCurrentTime(),
+        device_ip: getDeviceIP(),
+    });
+});
 app.post(
   "/problems",
   authenticateToken,
