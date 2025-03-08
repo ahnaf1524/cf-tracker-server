@@ -3,7 +3,7 @@
 
 ## Base URL
 ```
-https://your-api-url.com
+https://cf-tracker-server.onrender.com/
 ```
 
 ## Authentication
