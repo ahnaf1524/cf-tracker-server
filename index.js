@@ -4,8 +4,10 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const os = require('os');
+const cors = require("cors");
 
 const app = express();
+app.use(cors());
 const port = process.env.PORT || 3000;
 // utitlity functions
 const getCurrentTime = () => {
@@ -60,6 +62,7 @@ const ProblemSchema = new mongoose.Schema({
 const Problem = mongoose.model("Problem", ProblemSchema);
 
 app.use(express.json());
+
 
 // Authentication middleware
 const authenticateToken = (req, res, next) => {
